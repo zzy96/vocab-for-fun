@@ -14,12 +14,18 @@
     <div style="margin-bottom:20px">
       <a href="/"><button type="button" class="btn btn-primary">Back</button></a>
     </div>
-    <h1>Welcome to <%= username %>'s Home</h1>
+    <h1>Welcome to <%= home %>'s Home</h1>
     <div class="alert alert-info" role="alert">
+      <h4><span id="playerA"><%= game.playerA %></span><span id="playerAStatus"></span></h4>
       <p>Progress: <span id="progress">0</span>/10</p>
       <p>Score: <span id="score">0</span></p>
     </div>
-    <button id="start" type="button" class="btn btn-success" onclick="start()">Start</button>
+    <div class="alert alert-success" role="alert">
+      <h4><span id="playerB"><%= game.playerB?game.playerB:"nobody" %></span><span id="playerBStatus"></span></h4>
+      <p>Progress: <span id="progress">0</span>/10</p>
+      <p>Score: <span id="score">0</span></p>
+    </div>
+    <button id="ready" type="button" class="btn btn-danger" onclick="ready()">Ready</button>
     <div id="question">
       <h5>Countdown: <span id="countdown">10</span></h5>
       <h1 id="word"></h1>
@@ -48,8 +54,7 @@
     </table>
   </body>
   <script>
-    var finishOne
-    var finishAll
+    var isReady
     var questions
     var progress
     var score
@@ -61,11 +66,14 @@
       updateProgress(0)
       updateScore(0)
       updateCountdown(0)
-      finishOne = false
-      finishAll = false
       questions = []
       progress = []
       score = 0
+      isReady = false
+    }
+    function ready(){
+      isReady = true
+      document.getElementById("ready").style.display="none"
     }
     function start(){
       initialize()
@@ -92,7 +100,7 @@
         countdown--
         updateCountdown(countdown)
         if (countdown==0){
-          choose(null)
+          choose(-1)
         }
       }, 1000)
     }
@@ -105,7 +113,7 @@
         document.getElementById("choice3").style.pointerEvents = "none"
         document.getElementById("choice4").style.pointerEvents = "none"
         document.getElementById("choice"+questions[current].answer).style.border = "solid green 3px"
-      if (n){
+      if (n!=-1){
         if (n!=questions[current].answer){
           document.getElementById("choice"+n).style.border = "solid red 3px"
         }
@@ -151,8 +159,8 @@
       document.getElementById("question").style.display="inline"
     }
     function displayResult(){
-      document.getElementById("start").innerHTML="Restart"
-      document.getElementById("start").style.display="inline"
+      document.getElementById("ready").innerHTML="Restart"
+      document.getElementById("ready").style.display="inline"
       document.getElementById("question").style.display="none"
       var tbody = document.getElementById("tbody")
       while(tbody.hasChildNodes()){
@@ -214,8 +222,28 @@
       document.getElementById("countdown").innerHTML = n
     }
     setInterval(function(){
-      updateStatus(true, function(status){
+      updateGameStatus("<%= home %>", isReady, progress, function(game){
+        console.log(game)
+        if (Date.now() - game.playerATimestamp <= 5000){
+          if (game.playerAReady){
+            document.getElementById("playerAStatus").innerHTML = "(ready)"
+          } else {
+            document.getElementById("playerAStatus").innerHTML = "(online)"
+          }
+        } else {
+          document.getElementById("playerAStatus").innerHTML = ""
+        }
+        if (Date.now() - game.playerBTimestamp <= 5000){
+          document.getElementById("playerB").innerHTML = game.playerB
+          if (game.playerBReady){
+            document.getElementById("playerBStatus").innerHTML = "(ready)"
+          } else {
+            document.getElementById("playerBStatus").innerHTML = "(online)"
+          }
+        } else {
+          document.getElementById("playerBStatus").innerHTML = ""
+        }
       })
-    }, 5000);
+    }, 1000);
   </script>
 </html>

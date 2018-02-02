@@ -4,26 +4,33 @@ var path = require('path');
 var ac = require('./authenticationController');
 var qc = require('./questionController');
 var status = {
-  "zzy":{},
-  "xly":{}
+  "zzy":{"timestamp":0,"isBusy":false,"gameRoomTimestamp":0},
+  "xly":{"timestamp":0,"isBusy":false,"gameRoomTimestamp":0}
 };
-/* status template
-  {"zzy":{"timestamp":1517567390821,"isBusy":false}}
-*/
-var games = {};
-/* game template, username is key/playerA
-{
-  "playerA":"",
-  "playerB":"",
-  "playerATimestamp":0,
-  "playerBTimestamp":0,
-  "playerAReady":false,
-  "playerBReady":false,
-  "playerAProgress":[],
-  "playerBProgress":[],
-  "questions":[]
-}
-*/
+var games = {
+  "zzy":{
+    "playerA":"zzy",
+    "playerB":"",
+    "playerATimestamp":0,
+    "playerBTimestamp":0,
+    "playerAReady":false,
+    "playerBReady":false,
+    "playerAProgress":[],
+    "playerBProgress":[],
+    "questions":[]
+  },
+  "xly":{
+    "playerA":"xly",
+    "playerB":"",
+    "playerATimestamp":0,
+    "playerBTimestamp":0,
+    "playerAReady":false,
+    "playerBReady":false,
+    "playerAProgress":[],
+    "playerBProgress":[],
+    "questions":[]
+  }
+};
 
 module.exports = {
 
@@ -77,11 +84,42 @@ module.exports = {
   },
 
   play: function(req, res, next){
-    res.render("play", {"username":req.params.username})
+    ac.loginStatus(req, function(username){
+      if (username == ""){
+        res.redirect("/")
+      } else {
+        if (username == req.params.username){
+          games[req.params.username].playerATimestamp = Date.now()
+        } else {
+          games[req.params.username].playerB = username
+          games[req.params.username].playerBTimestamp = Date.now()
+        }
+        res.render("play", {"home":req.params.username, "username":username, "game":games[req.params.username]})
+      }
+    })
   },
 
   playStatus: function(req, res, next){
-
+    ac.loginStatus(req, function(username){
+      if (username == ""){
+        res.redirect("/")
+      } else {
+        if (username == req.params.username){
+          games[req.params.username].playerATimestamp = Date.now()
+          games[req.params.username].playerAReady = req.body.isReady
+          games[req.params.username].playerAProgress = req.body.progress
+        } else {
+          games[req.params.username].playerB = username
+          games[req.params.username].playerBTimestamp = Date.now()
+          games[req.params.username].playerBReady = req.body.isReady
+          games[req.params.username].playerBProgress = req.body.progress
+        }
+        status[req.params.username].gameRoomTimestamp = Date.now()
+        status[username].timestamp = Date.now()
+        status[username].isBusy = true
+        res.json(games[req.params.username])
+      }
+    })
   }
 
 }

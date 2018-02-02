@@ -33,3 +33,20 @@ function updateStatus(isBusy, cb){
   xhttp.setRequestHeader("Content-Type", "application/json");
   xhttp.send(JSON.stringify(data));
 }
+
+function updateGameStatus(home, isReady, progress, cb){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      cb(JSON.parse(xhttp.responseText));
+    }
+  }
+  xhttp.open('POST', server + '/play/status/' + home, true);
+  var data = {
+    'isBusy': true,
+    'isReady': isReady,
+    'progress': progress
+  }
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.send(JSON.stringify(data));
+}

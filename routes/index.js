@@ -22,9 +22,9 @@ router.get('/practice', ac.checkLoginStatus, uc.practice);
 router.get('/questions/:n', ac.checkLoginStatus, uc.questions)
 
 /* play */
-router.get('/play/:username', ac.checkLoginStatus, uc.play);
+router.get('/play/:username', uc.play);
 
 /* update play */
-router.post('/play/status/:username', ac.checkLoginStatus, uc.playStatus)
+router.post('/play/status/:username', uc.playStatus);
 
 module.exports = router;

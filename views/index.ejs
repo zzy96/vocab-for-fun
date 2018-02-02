@@ -12,6 +12,9 @@
   </head>
   <body>
     <h2>GRE For Fun</h2>
+    <div id="gameRoomStatus" class="alert alert-info" role="alert" style="display:none">
+      <p>Your game room has a visitor!</p>
+    </div>
     <a href="/practice"><button type="button" class="btn btn-primary">Practice</button></a>
     <a href="/play/<%= user.username %>"><button type="button" class="btn btn-warning">Your Game Room</button></a>
     <a href="/logout"><button type="button" class="btn btn-danger">Logout</button></a>
@@ -55,6 +58,11 @@
   <script>
     setInterval(function(){
       updateStatus(false, function(status){
+        if (Date.now() - status["<%= user.username %>"].gameRoomTimestamp <= 5000){
+          document.getElementById("gameRoomStatus").style.display = "block"
+        } else {
+          document.getElementById("gameRoomStatus").style.display = "none"
+        }
         for (var username in status){
           if (document.getElementById(username)){
             if (Date.now() - status[username].timestamp <= 10000 && !status[username].isBusy){

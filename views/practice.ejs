@@ -18,7 +18,7 @@
       <p>Progress: <span id="progress">0</span>/10</p>
       <p>Score: <span id="score">0</span></p>
     </div>
-    <button id="start" type="button" class="btn btn-success" onclick="start()">Start</button>
+    <button id="start" type="button" class="btn btn-danger" onclick="start()">Start</button>
     <div id="question">
       <h5>Countdown: <span id="countdown">10</span></h5>
       <h1 id="word"></h1>
@@ -31,7 +31,7 @@
           <li id="choice4" onclick="choose(4)"></li>
         </ul>
       </h2>
-      <button id="next" type="button" class="btn btn-warning" onclick="next()">Next</button>
+      <button id="next" type="button" class="btn btn-success" onclick="next()">Next</button>
     </div>
     <table class="table table-hover" id="result">
       <tr>
@@ -47,8 +47,6 @@
     </table>
   </body>
   <script>
-    var finishOne
-    var finishAll
     var questions
     var progress
     var score
@@ -60,8 +58,6 @@
       updateProgress(0)
       updateScore(0)
       updateCountdown(0)
-      finishOne = false
-      finishAll = false
       questions = []
       progress = []
       score = 0
@@ -91,20 +87,20 @@
         countdown--
         updateCountdown(countdown)
         if (countdown==0){
-          choose(null)
+          choose(-1)
         }
       }, 1000)
     }
     function choose(n){
-        var current = progress.length
-        clearInterval(timeout)
-        document.getElementById("choice0").style.pointerEvents = "none"
-        document.getElementById("choice1").style.pointerEvents = "none"
-        document.getElementById("choice2").style.pointerEvents = "none"
-        document.getElementById("choice3").style.pointerEvents = "none"
-        document.getElementById("choice4").style.pointerEvents = "none"
-        document.getElementById("choice"+questions[current].answer).style.border = "solid green 3px"
-      if (n){
+      var current = progress.length
+      clearInterval(timeout)
+      document.getElementById("choice0").style.pointerEvents = "none"
+      document.getElementById("choice1").style.pointerEvents = "none"
+      document.getElementById("choice2").style.pointerEvents = "none"
+      document.getElementById("choice3").style.pointerEvents = "none"
+      document.getElementById("choice4").style.pointerEvents = "none"
+      document.getElementById("choice"+questions[current].answer).style.border = "solid green 3px"
+      if (n!=-1){
         if (n!=questions[current].answer){
           document.getElementById("choice"+n).style.border = "solid red 3px"
         }
