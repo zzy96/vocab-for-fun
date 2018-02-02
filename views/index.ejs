@@ -8,6 +8,7 @@
     <!-- bootstrap -->
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" />
     <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/util.js"></script>
   </head>
   <body>
     <h2>GRE For Fun</h2>
@@ -50,4 +51,19 @@
       </tbody>
     </table>
   </body>
+  <script>
+    setInterval(function(){
+      updateStatus(function(res){
+        for (var i=0; i<res.friends.length; i++){
+          if (Date.now() - res['status'][res.friends[i].username] <= 3000){
+            document.getElementById(res.friends[i].username).innerHTML = 'online'
+            document.getElementById(res.friends[i].username).style.color = 'green'
+          } else {
+            document.getElementById(res.friends[i].username).innerHTML = 'offline'
+            document.getElementById(res.friends[i].username).style.color = 'black'
+          }
+        }
+      })
+    }, 3000);
+  </script>
 </html>

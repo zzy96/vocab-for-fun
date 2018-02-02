@@ -18,3 +18,14 @@ function generateQuestions(n, cb){
 function calculateScore(timeLeft){
   return timeLeft*5+50;
 }
+
+function updateStatus(cb){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      cb(JSON.parse(xhttp.responseText));
+    }
+  }
+  xhttp.open('GET', server + '/status', true);
+  xhttp.send();
+}

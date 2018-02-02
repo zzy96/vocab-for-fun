@@ -13,7 +13,7 @@ router.post('/', uc.login);
 router.get('/logout', uc.logout);
 
 /* status update */
-router.post('/status', uc.updateStatus);
+router.get('/status', uc.updateStatus);
 
 /* practice */
 router.get('/practice', ac.checkLoginStatus, uc.practice);
