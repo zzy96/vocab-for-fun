@@ -1,12 +1,15 @@
 var ac = require('./authenticationController');
 var qc = require('./questionController');
+var status = require('../data/status');
+var invitations = require('../data/invitations');
 
 module.exports = {
 
   login: function(req, res, next){
     ac.login(req, function(flag){
       if (flag){
-        res.render("index")
+        var profile = require('../data/users/'+req.body.username)
+        res.render("index", {user: profile})
       } else {
         res.render("login", {msg:"Incorrect username or password!"})
       }
@@ -15,7 +18,7 @@ module.exports = {
 
   logout: function(req, res, next){
     ac.logout(req, function(){
-      res.render("login", {msg:""})
+      res.redirect("/")
     })
   },
 
@@ -24,7 +27,8 @@ module.exports = {
       if (username == ""){
         res.render("login", {msg:""})
       } else {
-        res.render("index")
+        var profile = require('../data/users/'+username)
+        res.render("index", {user: profile})
       }
     })
   },
@@ -34,7 +38,7 @@ module.exports = {
   },
 
   practice: function(req, res, next){
-
+    res.render("practice")
   },
 
   invite: function(req, res, next){
@@ -42,7 +46,7 @@ module.exports = {
   },
 
   play: function(req, res, next){
-
+    res.render("play")
   },
 
   playStatus: function(req, res, next){
