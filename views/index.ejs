@@ -13,6 +13,7 @@
   <body>
     <h2>GRE For Fun</h2>
     <a href="/practice"><button type="button" class="btn btn-primary">Practice</button></a>
+    <a href="/play/<%= user.username %>"><button type="button" class="btn btn-warning">Your Game Room</button></a>
     <a href="/logout"><button type="button" class="btn btn-danger">Logout</button></a>
     <h4>Friend List</h4>
     <table class="table table-hover">
@@ -20,7 +21,7 @@
         <th class="col-md-3">Username</th>
         <th class="col-md-3">Status</th>
         <th class="col-md-3">Win / Loss</th>
-        <th class="col-md-3">Invite</th>
+        <th class="col-md-3">Game Room</th>
       </tr>
       <tbody>
         <% for (var i=0; i<user.friends.length; i++) { %>
@@ -28,7 +29,7 @@
             <td><%= user.friends[i].username %></th>
             <td id="<%= user.friends[i].username %>">offline</td>
             <td><%= user.friends[i].play.win %> / <%= user.friends[i].play.loss %></td>
-            <td>+</td>
+            <td><a href="/play/<%= user.friends[i].username %>" ><button type="button" class="btn btn-success btn-xs">Enter</button></a></td>
           </tr>
         <% } %>
       </tbody>
@@ -53,17 +54,22 @@
   </body>
   <script>
     setInterval(function(){
-      updateStatus(function(res){
-        for (var i=0; i<res.friends.length; i++){
-          if (Date.now() - res['status'][res.friends[i].username] <= 3000){
-            document.getElementById(res.friends[i].username).innerHTML = 'online'
-            document.getElementById(res.friends[i].username).style.color = 'green'
-          } else {
-            document.getElementById(res.friends[i].username).innerHTML = 'offline'
-            document.getElementById(res.friends[i].username).style.color = 'black'
+      updateStatus(false, function(status){
+        for (var username in status){
+          if (document.getElementById(username)){
+            if (Date.now() - status[username].timestamp <= 10000 && !status[username].isBusy){
+              document.getElementById(username).innerHTML = 'online'
+              document.getElementById(username).style.color = 'green'
+            } else if (Date.now() - status[username].timestamp <= 10000 && status[username].isBusy){
+              document.getElementById(username).innerHTML = 'busy'
+              document.getElementById(username).style.color = 'red'
+            } else {
+              document.getElementById(username).innerHTML = 'offline'
+              document.getElementById(username).style.color = 'black'
+            }
           }
         }
       })
-    }, 3000);
+    }, 1000);
   </script>
 </html>

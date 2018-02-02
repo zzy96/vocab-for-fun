@@ -13,7 +13,7 @@ router.post('/', uc.login);
 router.get('/logout', uc.logout);
 
 /* status update */
-router.get('/status', uc.updateStatus);
+router.post('/status', uc.updateStatus);
 
 /* practice */
 router.get('/practice', ac.checkLoginStatus, uc.practice);
@@ -21,13 +21,10 @@ router.get('/practice', ac.checkLoginStatus, uc.practice);
 /* get questions */
 router.get('/questions/:n', ac.checkLoginStatus, uc.questions)
 
-/* invite */
-router.get('/invite/:username', ac.checkLoginStatus, uc.invite);
-
 /* play */
-router.get('/play/:session', ac.checkLoginStatus, uc.play);
+router.get('/play/:username', ac.checkLoginStatus, uc.play);
 
 /* update play */
-router.get('/play/status/:session', ac.checkLoginStatus, uc.playStatus)
+router.post('/play/status/:username', ac.checkLoginStatus, uc.playStatus)
 
 module.exports = router;

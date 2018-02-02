@@ -3,23 +3,22 @@ var path = require('path');
 
 var ac = require('./authenticationController');
 var qc = require('./questionController');
-var status = {};
+var status = {
+  "zzy":{},
+  "xly":{}
+};
 /* status template
-  {"zzy":1517567390821}
+  {"zzy":{"timestamp":1517567390821,"isBusy":false}}
 */
-var invitations = {};
-/* invitation template (invitation to zzy)
-  {
-    "zzy":[gameIndex...]
-  }
-*/
-var games = [];
-/* game template
+var games = {};
+/* game template, username is key/playerA
 {
   "playerA":"",
   "playerB":"",
   "playerATimestamp":0,
   "playerBTimestamp":0,
+  "playerAReady":false,
+  "playerBReady":false,
   "playerAProgress":[],
   "playerBProgress":[],
   "questions":[]
@@ -50,7 +49,7 @@ module.exports = {
       if (username == ""){
         res.render("login", {msg:""})
       } else {
-        var profile = require('../data/users/'+req.body.username)
+        var profile = require('../data/users/'+username)
         res.render("index", {user:profile})
       }
     })
@@ -62,8 +61,9 @@ module.exports = {
         res.json({})
       } else {
         var profile = require('../data/users/'+username)
-        status[username] = Date.now()
-        res.json({status:status,friends:profile.friends})
+        status[username].timestamp = Date.now()
+        status[username].isBusy = req.body.isBusy
+        res.json(status)
       }
     })
   },
@@ -76,12 +76,8 @@ module.exports = {
     res.json(qc.generateN(req.params.n))
   },
 
-  invite: function(req, res, next){
-
-  },
-
   play: function(req, res, next){
-    res.render("play")
+    res.render("play", {"username":req.params.username})
   },
 
   playStatus: function(req, res, next){

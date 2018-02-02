@@ -8,9 +8,214 @@
     <!-- bootstrap -->
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" />
     <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/util.js"></script>
   </head>
-  <body>
-    <h2>Play</h2>
-    <a href="/"><button type="button" class="btn btn-primary">Back</button></a>
+  <body onload="initialize()">
+    <div style="margin-bottom:20px">
+      <a href="/"><button type="button" class="btn btn-primary">Back</button></a>
+    </div>
+    <h1>Welcome to <%= username %>'s Home</h1>
+    <div class="alert alert-info" role="alert">
+      <p>Progress: <span id="progress">0</span>/10</p>
+      <p>Score: <span id="score">0</span></p>
+    </div>
+    <button id="start" type="button" class="btn btn-success" onclick="start()">Start</button>
+    <div id="question">
+      <h5>Countdown: <span id="countdown">10</span></h5>
+      <h1 id="word"></h1>
+      <h2>
+        <ul style="cursor:pointer">
+          <li id="choice0" onclick="choose(0)"></li>
+          <li id="choice1" onclick="choose(1)"></li>
+          <li id="choice2" onclick="choose(2)"></li>
+          <li id="choice3" onclick="choose(3)"></li>
+          <li id="choice4" onclick="choose(4)"></li>
+        </ul>
+      </h2>
+      <button id="next" type="button" class="btn btn-warning" onclick="next()">Next</button>
+    </div>
+    <table class="table table-hover" id="result">
+      <tr>
+        <th class="col-md-2">Word</th>
+        <th class="col-md-2">Meaning</th>
+        <th class="col-md-2">Status</th>
+        <th class="col-md-2">Time</th>
+        <th class="col-md-2">Score</th>
+        <th class="col-md-2">Cumulative Score</th>
+      </tr>
+      <tbody id="tbody">
+      </tbody>
+    </table>
   </body>
+  <script>
+    var finishOne
+    var finishAll
+    var questions
+    var progress
+    var score
+    var countdown
+    var timeout
+    function initialize(){
+      document.getElementById("question").style.display="none"
+      document.getElementById("result").style.display="none"
+      updateProgress(0)
+      updateScore(0)
+      updateCountdown(0)
+      finishOne = false
+      finishAll = false
+      questions = []
+      progress = []
+      score = 0
+    }
+    function start(){
+      initialize()
+      generateQuestions(10, function(response){
+        questions = response
+        document.getElementById("start").style.display="none"
+        next()
+      })
+    }
+    function next(){
+      document.getElementById("next").style.display="none"
+      if (progress.length == 10){
+        displayResult()
+      } else {
+        updateProgress(progress.length + 1)
+        displayQuestion(progress.length)
+        startCountdown()
+      }
+    }
+    function startCountdown(){
+      countdown = 10
+      updateCountdown(countdown)
+      timeout = setInterval(function(){
+        countdown--
+        updateCountdown(countdown)
+        if (countdown==0){
+          choose(null)
+        }
+      }, 1000)
+    }
+    function choose(n){
+        var current = progress.length
+        clearInterval(timeout)
+        document.getElementById("choice0").style.pointerEvents = "none"
+        document.getElementById("choice1").style.pointerEvents = "none"
+        document.getElementById("choice2").style.pointerEvents = "none"
+        document.getElementById("choice3").style.pointerEvents = "none"
+        document.getElementById("choice4").style.pointerEvents = "none"
+        document.getElementById("choice"+questions[current].answer).style.border = "solid green 3px"
+      if (n){
+        if (n!=questions[current].answer){
+          document.getElementById("choice"+n).style.border = "solid red 3px"
+        }
+        var curScore = (n==questions[current].answer)?calculateScore(countdown):0
+        score += curScore
+        updateScore(score)
+        progress.push({
+          status: n==questions[current].answer,
+          choice: document.getElementById("choice"+n).innerHTML,
+          time: 10-countdown,
+          score: curScore,
+          cumulativeScore: score
+        })
+      } else {
+        progress.push({
+          status: false,
+          choice: "",
+          time: 10,
+          score: 0,
+          cumulativeScore: score
+        })
+      }
+      document.getElementById("next").style.display="inline"
+    }
+    function displayQuestion(n){
+      var question = questions[n]
+      document.getElementById("word").innerHTML = question.word
+      document.getElementById("choice0").innerHTML = question.choices[0]
+      document.getElementById("choice1").innerHTML = question.choices[1]
+      document.getElementById("choice2").innerHTML = question.choices[2]
+      document.getElementById("choice3").innerHTML = question.choices[3]
+      document.getElementById("choice4").innerHTML = question.choices[4]
+      document.getElementById("choice0").style.pointerEvents = "auto"
+      document.getElementById("choice1").style.pointerEvents = "auto"
+      document.getElementById("choice2").style.pointerEvents = "auto"
+      document.getElementById("choice3").style.pointerEvents = "auto"
+      document.getElementById("choice4").style.pointerEvents = "auto"
+      document.getElementById("choice0").style.border = "none"
+      document.getElementById("choice1").style.border = "none"
+      document.getElementById("choice2").style.border = "none"
+      document.getElementById("choice3").style.border = "none"
+      document.getElementById("choice4").style.border = "none"
+      document.getElementById("question").style.display="inline"
+    }
+    function displayResult(){
+      document.getElementById("start").innerHTML="Restart"
+      document.getElementById("start").style.display="inline"
+      document.getElementById("question").style.display="none"
+      var tbody = document.getElementById("tbody")
+      while(tbody.hasChildNodes()){
+        tbody.removeChild(tbody.lastChild);
+      }
+      var tr
+      var td
+      var node
+      for (var i=0; i<questions.length; i++){
+        tr = document.createElement('tr');
+        // word
+        td = document.createElement('td');
+        node = document.createTextNode(questions[i].word);
+        td.appendChild(node);
+        tr.appendChild(td);
+        // meaning
+        td = document.createElement('td');
+        node = document.createTextNode(questions[i].choices[questions[i].answer]);
+        td.appendChild(node);
+        tr.appendChild(td);
+        // status
+        td = document.createElement('td');
+        if (progress[i].status){
+          node = document.createTextNode("correct");
+          td.style.color = 'green';
+        } else {
+          node = document.createTextNode("Incorrect. You choose: \""+progress[i].choice+"\"");
+          td.style.color = 'red';
+        }
+        td.appendChild(node);
+        tr.appendChild(td);
+        // time
+        td = document.createElement('td');
+        node = document.createTextNode(progress[i].time);
+        td.appendChild(node);
+        tr.appendChild(td);
+        // score
+        td = document.createElement('td');
+        node = document.createTextNode(progress[i].score);
+        td.appendChild(node);
+        tr.appendChild(td);
+        // cumulative score
+        td = document.createElement('td');
+        node = document.createTextNode(progress[i].cumulativeScore);
+        td.appendChild(node);
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+      }
+      document.getElementById("result").style.display="inline"
+    }
+    function updateProgress(n){
+      document.getElementById("progress").innerHTML = n
+    }
+    function updateScore(n){
+      document.getElementById("score").innerHTML = n
+    }
+    function updateCountdown(n){
+      document.getElementById("countdown").innerHTML = n
+    }
+    setInterval(function(){
+      updateStatus(true, function(status){
+      })
+    }, 5000);
+  </script>
 </html>

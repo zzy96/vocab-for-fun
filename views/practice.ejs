@@ -212,5 +212,9 @@
     function updateCountdown(n){
       document.getElementById("countdown").innerHTML = n
     }
+    setInterval(function(){
+      updateStatus(true, function(status){
+      })
+    }, 5000);
   </script>
 </html>
