@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var uc = require('../controllers/userController');
+var ac = require('../controllers/authenticationController');
 
 /* home page */
 router.get('/', uc.checkLoginStatus);
@@ -9,7 +10,7 @@ router.get('/', uc.checkLoginStatus);
 router.post('/', uc.login);
 
 /* logout */
-router.post('/logout', uc.logout);
+router.get('/logout', uc.logout);
 
 /* status update */
 router.post('/status', uc.updateStatus);

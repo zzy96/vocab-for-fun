@@ -10,7 +10,7 @@ module.exports = {
       }
     }
     cb(false)
-  ,
+  },
 
   logout: function(req, cb){
 		req.session.user = undefined

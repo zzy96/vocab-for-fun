@@ -8,21 +8,21 @@ module.exports = {
       if (flag){
         res.render("index")
       } else {
-        res.render("login")
+        res.render("login", {msg:"Incorrect username or password!"})
       }
     })
   },
 
   logout: function(req, res, next){
     ac.logout(req, function(){
-      res.render("login")
+      res.render("login", {msg:""})
     })
   },
 
   checkLoginStatus: function(req, res, next){
     ac.loginStatus(req, function(username){
       if (username == ""){
-        res.render("login")
+        res.render("login", {msg:""})
       } else {
         res.render("index")
       }

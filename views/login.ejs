@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <script src="/javascripts/jquery.min.js"></script>
+    <!-- bootstrap -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" />
+    <script src="/javascripts/bootstrap.min.js"></script>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <% if (msg!=""){%>
+        <div class="alert alert-warning" role="alert">
+          <%= msg %>
+        </div>
+      <% } %>
+
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <form method="POST">
+            <div class="page-header">
+              <h2>GRE for Fun</h2>
+            </div>
+
+            <label>Username</label>
+            <input type="text" class="form-control" placeholder="Username"  name="username" required autofocus>
+
+            <br>
+
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+
+            <br>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+        </form>
+      </div>
+      <div class="col-sm-4"></div>
+
+    </div>
+
+  </body>
+
+</html>
