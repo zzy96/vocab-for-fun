@@ -41,6 +41,10 @@ module.exports = {
     res.render("practice")
   },
 
+  questions: function(req, res, next){
+    res.json(qc.generateN(req.params.n))
+  },
+
   invite: function(req, res, next){
 
   },

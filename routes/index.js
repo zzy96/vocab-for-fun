@@ -18,6 +18,9 @@ router.post('/status', uc.updateStatus);
 /* practice */
 router.get('/practice', ac.checkLoginStatus, uc.practice);
 
+/* get questions */
+router.get('/questions/:n', ac.checkLoginStatus, uc.questions)
+
 /* invite */
 router.get('/invite/:username', ac.checkLoginStatus, uc.invite);
 
