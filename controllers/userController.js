@@ -103,8 +103,6 @@ module.exports = {
 
   playStatus: function(req, res, next){
     ac.loginStatus(req, function(username){
-      console.log(username)
-      console.log(games.zzy)
       if (username == ""){
         res.redirect("/")
       } else {

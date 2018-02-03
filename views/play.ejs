@@ -11,34 +11,39 @@
     <script src="/javascripts/util.js"></script>
   </head>
   <body onload="initialize()">
-    <div style="margin-bottom:20px">
-      <a href="/"><button type="button" class="btn btn-primary">Back</button></a>
+    <div style="text-align:center">
+      <a href="/" style="text-decoration:none"><h1>GRE For Fun</h1></a>
+      <h4>Welcome to <%= home %>'s Home</h4>
     </div>
-    <h1>Welcome to <%= home %>'s Home</h1>
-    <div class="alert alert-info" role="alert">
-      <h4><span id="playerA"><%= game.playerA %></span><span id="playerAStatus"></span></h4>
-      <p>Progress: <span id="<%=game.playerA%>progress">0</span>/10</p>
-      <p>Score: <span id="<%=game.playerA%>score">0</span></p>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-6 alert alert-info" role="alert" style="text-align:center">
+          <h4><span id="playerA"><%= game.playerA %></span><span id="playerAStatus"></span></h4>
+          <p>Progress: <span id="<%=game.playerA%>progress">0</span>/10</p>
+          <p>Score: <span id="<%=game.playerA%>score">0</span></p>
+        </div>
+        <div class="col-xs-6 alert alert-success" role="alert" style="text-align:center">
+          <h4><span id="playerB"><%= game.playerB?game.playerB:"" %></span><span id="playerBStatus"></span></h4>
+          <p>Progress: <span id="<%=game.playerB%>progress">0</span>/10</p>
+          <p>Score: <span id="<%=game.playerB%>score">0</span></p>
+        </div>
+      </div>
     </div>
-    <div class="alert alert-success" role="alert">
-      <h4><span id="playerB"><%= game.playerB?game.playerB:"" %></span><span id="playerBStatus"></span></h4>
-      <p>Progress: <span id="<%=game.playerB%>progress">0</span>/10</p>
-      <p>Score: <span id="<%=game.playerB%>score">0</span></p>
-    </div>
-    <button id="ready" type="button" class="btn btn-danger" onclick="ready()">Ready</button>
-    <div id="question">
-      <h5>Countdown: <span id="countdown">10</span></h5>
+    <button id="ready" type="button" class="btn btn-danger" onclick="ready()" style="margin:0 auto; display:block">Ready</button>
+    <br>
+    <div id="question" style="text-align:center">
+      <span id="countdown" style="font-size:30px;color:#660066;font-weight:900;">10</span>
       <h1 id="word"></h1>
-      <h2>
-        <ul style="cursor:pointer">
-          <li id="choice0" onclick="choose(0)"></li>
-          <li id="choice1" onclick="choose(1)"></li>
-          <li id="choice2" onclick="choose(2)"></li>
-          <li id="choice3" onclick="choose(3)"></li>
-          <li id="choice4" onclick="choose(4)"></li>
+      <h4>
+        <ul class="list-group" style="cursor:pointer">
+          <li class="list-group-item" id="choice0" onclick="choose(0)"></li>
+          <li class="list-group-item" id="choice1" onclick="choose(1)"></li>
+          <li class="list-group-item" id="choice2" onclick="choose(2)"></li>
+          <li class="list-group-item" id="choice3" onclick="choose(3)"></li>
+          <li class="list-group-item" id="choice4" onclick="choose(4)"></li>
         </ul>
-      </h2>
-      <button id="next" type="button" class="btn btn-warning" onclick="next()">Next</button>
+      </h4>
+      <button id="next" type="button" class="btn btn-warning" onclick="next()" style="margin: 0 auto">Next</button>
     </div>
     <table class="table table-hover" id="result">
       <tr>
@@ -113,10 +118,10 @@
       document.getElementById("choice2").style.pointerEvents = "none"
       document.getElementById("choice3").style.pointerEvents = "none"
       document.getElementById("choice4").style.pointerEvents = "none"
-      document.getElementById("choice"+questions[current].answer).style.border = "solid green 3px"
+      document.getElementById("choice"+questions[current].answer).style.background="#99ff99"
       if (n!=-1){
         if (n!=questions[current].answer){
-          document.getElementById("choice"+n).style.border = "solid red 3px"
+          document.getElementById("choice"+n).style.background = "#ff9999"
         }
         var curScore = (n==questions[current].answer)?calculateScore(countdown):0
         score += curScore
@@ -137,7 +142,7 @@
           cumulativeScore: score
         })
       }
-      document.getElementById("next").style.display="inline"
+      document.getElementById("next").style.display="block"
     }
     function displayQuestion(n){
       var question = questions[n]
@@ -152,12 +157,12 @@
       document.getElementById("choice2").style.pointerEvents = "auto"
       document.getElementById("choice3").style.pointerEvents = "auto"
       document.getElementById("choice4").style.pointerEvents = "auto"
-      document.getElementById("choice0").style.border = "none"
-      document.getElementById("choice1").style.border = "none"
-      document.getElementById("choice2").style.border = "none"
-      document.getElementById("choice3").style.border = "none"
-      document.getElementById("choice4").style.border = "none"
-      document.getElementById("question").style.display="inline"
+      document.getElementById("choice0").style.background = "none"
+      document.getElementById("choice1").style.background = "none"
+      document.getElementById("choice2").style.background = "none"
+      document.getElementById("choice3").style.background = "none"
+      document.getElementById("choice4").style.background = "none"
+      document.getElementById("question").style.display="block"
     }
     function displayResult(game){
       document.getElementById("ready").style.display="block"
@@ -216,7 +221,7 @@
 
         tbody.appendChild(tr);
       }
-      document.getElementById("result").style.display="inline"
+      document.getElementById("result").style.display="block"
     }
     function updateProgress(username, n){
       document.getElementById(username + "progress").innerHTML = n
