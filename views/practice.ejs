@@ -3,7 +3,6 @@
   <head>
     <title>GRE For Fun</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <meta name="viewport" content="width=device-width" />
     <script src="/javascripts/jquery.min.js"></script>
     <!-- bootstrap -->
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" />
@@ -34,12 +33,10 @@
     </div>
     <table class="table table-hover" id="result">
       <tr>
-        <th class="col-md-2">Word</th>
-        <th class="col-md-2">Meaning</th>
-        <th class="col-md-2">Status</th>
-        <th class="col-md-2">Time</th>
-        <th class="col-md-2">Score</th>
-        <th class="col-md-2">Cumulative Score</th>
+        <th class="col-xs-3">Word</th>
+        <th class="col-xs-3">Meaning</th>
+        <th class="col-xs-3">Status</th>
+        <th class="col-xs-3">Score</th>
       </tr>
       <tbody id="tbody">
       </tbody>
@@ -178,21 +175,21 @@
         }
         td.appendChild(node);
         tr.appendChild(td);
-        // time
-        td = document.createElement('td');
-        node = document.createTextNode(progress[i].time);
-        td.appendChild(node);
-        tr.appendChild(td);
+        // // time
+        // td = document.createElement('td');
+        // node = document.createTextNode(progress[i].time);
+        // td.appendChild(node);
+        // tr.appendChild(td);
         // score
         td = document.createElement('td');
         node = document.createTextNode(progress[i].score);
         td.appendChild(node);
         tr.appendChild(td);
-        // cumulative score
-        td = document.createElement('td');
-        node = document.createTextNode(progress[i].cumulativeScore);
-        td.appendChild(node);
-        tr.appendChild(td);
+        // // cumulative score
+        // td = document.createElement('td');
+        // node = document.createTextNode(progress[i].cumulativeScore);
+        // td.appendChild(node);
+        // tr.appendChild(td);
 
         tbody.appendChild(tr);
       }

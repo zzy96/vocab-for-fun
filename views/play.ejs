@@ -244,7 +244,7 @@
             document.getElementById("playerAStatus").innerHTML = "(online)"
           }
         } else {
-          document.getElementById("playerAStatus").innerHTML = ""
+          document.getElementById("playerAStatus").innerHTML = "(-)"
         }
         if (Date.now() - game.playerBTimestamp <= 5000){
           document.getElementById("playerB").innerHTML = game.playerB
@@ -256,7 +256,7 @@
             document.getElementById("playerBStatus").innerHTML = "(online)"
           }
         } else {
-          document.getElementById("playerBStatus").innerHTML = ""
+          document.getElementById("playerBStatus").innerHTML = "(-)"
         }
         if (game.inGame){
           if (isReady){
