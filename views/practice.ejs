@@ -11,27 +11,25 @@
     <script src="/javascripts/util.js"></script>
   </head>
   <body onload="initialize()">
-    <div style="margin-bottom:20px">
-      <a href="/"><button type="button" class="btn btn-primary">Back</button></a>
-    </div>
-    <div class="alert alert-info" role="alert">
+    <a href="/" style="text-align:center; text-decoration:none"><h1>GRE For Fun</h1></a>
+    <div class="alert alert-info" role="alert" style="text-align:center">
       <p>Progress: <span id="progress">0</span>/10</p>
       <p>Score: <span id="score">0</span></p>
     </div>
-    <button id="start" type="button" class="btn btn-danger" onclick="start()">Start</button>
-    <div id="question">
-      <h5>Countdown: <span id="countdown">10</span></h5>
+    <button id="start" type="button" class="btn btn-danger" onclick="start()" style="margin:0 auto; display:block">Start</button>
+    <div id="question" style="text-align:center">
+      <span id="countdown" style="font-size:30px;color:#660066;font-weight:900;">10</span>
       <h1 id="word"></h1>
-      <h2>
-        <ul style="cursor:pointer">
-          <li id="choice0" onclick="choose(0)"></li>
-          <li id="choice1" onclick="choose(1)"></li>
-          <li id="choice2" onclick="choose(2)"></li>
-          <li id="choice3" onclick="choose(3)"></li>
-          <li id="choice4" onclick="choose(4)"></li>
+      <h4>
+        <ul class="list-group" style="cursor:pointer">
+          <li class="list-group-item" id="choice0" onclick="choose(0)"></li>
+          <li class="list-group-item" id="choice1" onclick="choose(1)"></li>
+          <li class="list-group-item" id="choice2" onclick="choose(2)"></li>
+          <li class="list-group-item" id="choice3" onclick="choose(3)"></li>
+          <li class="list-group-item" id="choice4" onclick="choose(4)"></li>
         </ul>
       </h2>
-      <button id="next" type="button" class="btn btn-success" onclick="next()">Next</button>
+      <button id="next" type="button" class="btn btn-warning" onclick="next()" style="margin: 0 auto">Next</button>
     </div>
     <table class="table table-hover" id="result">
       <tr>
@@ -99,10 +97,10 @@
       document.getElementById("choice2").style.pointerEvents = "none"
       document.getElementById("choice3").style.pointerEvents = "none"
       document.getElementById("choice4").style.pointerEvents = "none"
-      document.getElementById("choice"+questions[current].answer).style.border = "solid green 3px"
+      document.getElementById("choice"+questions[current].answer).style.background="#99ff99"
       if (n!=-1){
         if (n!=questions[current].answer){
-          document.getElementById("choice"+n).style.border = "solid red 3px"
+          document.getElementById("choice"+n).style.background = "#ff9999"
         }
         var curScore = (n==questions[current].answer)?calculateScore(countdown):0
         score += curScore
@@ -123,7 +121,7 @@
           cumulativeScore: score
         })
       }
-      document.getElementById("next").style.display="inline"
+      document.getElementById("next").style.display="block"
     }
     function displayQuestion(n){
       var question = questions[n]
@@ -138,16 +136,16 @@
       document.getElementById("choice2").style.pointerEvents = "auto"
       document.getElementById("choice3").style.pointerEvents = "auto"
       document.getElementById("choice4").style.pointerEvents = "auto"
-      document.getElementById("choice0").style.border = "none"
-      document.getElementById("choice1").style.border = "none"
-      document.getElementById("choice2").style.border = "none"
-      document.getElementById("choice3").style.border = "none"
-      document.getElementById("choice4").style.border = "none"
-      document.getElementById("question").style.display="inline"
+      document.getElementById("choice0").style.background = "none"
+      document.getElementById("choice1").style.background = "none"
+      document.getElementById("choice2").style.background = "none"
+      document.getElementById("choice3").style.background = "none"
+      document.getElementById("choice4").style.background = "none"
+      document.getElementById("question").style.display="block"
     }
     function displayResult(){
       document.getElementById("start").innerHTML="Restart"
-      document.getElementById("start").style.display="inline"
+      document.getElementById("start").style.display="block"
       document.getElementById("question").style.display="none"
       var tbody = document.getElementById("tbody")
       while(tbody.hasChildNodes()){
@@ -197,7 +195,7 @@
 
         tbody.appendChild(tr);
       }
-      document.getElementById("result").style.display="inline"
+      document.getElementById("result").style.display="block"
     }
     function updateProgress(n){
       document.getElementById("progress").innerHTML = n
